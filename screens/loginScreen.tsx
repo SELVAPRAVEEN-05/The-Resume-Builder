@@ -1,6 +1,9 @@
+import { useNavigation } from '@react-navigation/native';
+import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import React, { useState } from 'react';
 import {
   Alert,
+  Image,
   SafeAreaView,
   ScrollView,
   StatusBar,
@@ -10,6 +13,7 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
+import { RootStackParamList } from '../navigation/AppNavigator';
 
 const COLORS = {
   primary: '#10B981',
@@ -25,12 +29,10 @@ const COLORS = {
   twitter: '#1DA1F2',
 };
 
-interface LoginScreenProps {
-  onRegister?: () => void;
-  onBack?: () => void;
-}
+const LoginScreen = () => {
+  const navigation =
+    useNavigation<NativeStackNavigationProp<RootStackParamList>>();
 
-const LoginScreen: React.FC<LoginScreenProps> = ({ onRegister, onBack }) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
@@ -40,23 +42,23 @@ const LoginScreen: React.FC<LoginScreenProps> = ({ onRegister, onBack }) => {
       return;
     }
 
-    // TODO: implement real authentication
     Alert.alert('Success', 'Welcome back!');
+    navigation.navigate('Dashboard');
   };
 
   return (
     <SafeAreaView style={styles.safeArea}>
       <StatusBar barStyle="dark-content" backgroundColor={COLORS.white} />
-      <ScrollView 
+      <ScrollView
         contentContainerStyle={styles.container}
         showsVerticalScrollIndicator={false}
       >
         {/* Logo */}
-        <View style={styles.logoContainer}>
-          <View style={styles.logo}>
-            <Text style={styles.logoText}>H</Text>
-          </View>
-        </View>
+          <Image
+            source={require('../assets/logo-new.png')}
+            style={styles.headerImage}
+            resizeMode="contain"
+          />
 
         {/* Title */}
         <Text style={styles.title}>Sign in your account</Text>
@@ -88,9 +90,9 @@ const LoginScreen: React.FC<LoginScreenProps> = ({ onRegister, onBack }) => {
         </View>
 
         {/* Sign In Button */}
-        <TouchableOpacity 
-          style={styles.primaryButton} 
-          onPress={handleLogin} 
+        <TouchableOpacity
+          style={styles.primaryButton}
+          onPress={handleLogin}
           activeOpacity={0.85}
         >
           <Text style={styles.primaryButtonText}>Sign In</Text>
@@ -105,9 +107,9 @@ const LoginScreen: React.FC<LoginScreenProps> = ({ onRegister, onBack }) => {
 
         {/* Social Login Buttons */}
         <View style={styles.socialContainer}>
-          <TouchableOpacity 
-            style={styles.socialButton} 
-            onPress={() => Alert.alert('Google', 'Continue with Google')} 
+          <TouchableOpacity
+            style={styles.socialButton}
+            onPress={() => Alert.alert('Google', 'Continue with Google')}
             activeOpacity={0.85}
           >
             <View style={[styles.socialIcon, { backgroundColor: '#FEE2E2' }]}>
@@ -115,9 +117,9 @@ const LoginScreen: React.FC<LoginScreenProps> = ({ onRegister, onBack }) => {
             </View>
           </TouchableOpacity>
 
-          <TouchableOpacity 
-            style={styles.socialButton} 
-            onPress={() => Alert.alert('Facebook', 'Continue with Facebook')} 
+          <TouchableOpacity
+            style={styles.socialButton}
+            onPress={() => Alert.alert('Facebook', 'Continue with Facebook')}
             activeOpacity={0.85}
           >
             <View style={[styles.socialIcon, { backgroundColor: '#DBEAFE' }]}>
@@ -125,9 +127,9 @@ const LoginScreen: React.FC<LoginScreenProps> = ({ onRegister, onBack }) => {
             </View>
           </TouchableOpacity>
 
-          <TouchableOpacity 
-            style={styles.socialButton} 
-            onPress={() => Alert.alert('Twitter', 'Continue with Twitter')} 
+          <TouchableOpacity
+            style={styles.socialButton}
+            onPress={() => Alert.alert('Twitter', 'Continue with Twitter')}
             activeOpacity={0.85}
           >
             <View style={[styles.socialIcon, { backgroundColor: '#DBEAFE' }]}>
@@ -139,7 +141,10 @@ const LoginScreen: React.FC<LoginScreenProps> = ({ onRegister, onBack }) => {
         {/* Bottom Text */}
         <View style={styles.bottomRow}>
           <Text style={styles.bottomText}>Don't have an account? </Text>
-          <TouchableOpacity onPress={onRegister} activeOpacity={0.7}>
+          <TouchableOpacity
+            onPress={() => navigation.navigate('Register')}
+            activeOpacity={0.7}
+          >
             <Text style={styles.linkTextBold}>Sign Up</Text>
           </TouchableOpacity>
         </View>
@@ -149,9 +154,9 @@ const LoginScreen: React.FC<LoginScreenProps> = ({ onRegister, onBack }) => {
 };
 
 const styles = StyleSheet.create({
-  safeArea: { 
-    flex: 1, 
-    backgroundColor: COLORS.white 
+  safeArea: {
+    flex: 1,
+    backgroundColor: COLORS.white,
   },
   container: {
     padding: 24,
@@ -160,9 +165,14 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     minHeight: '100%',
   },
-  logoContainer: {
+  headerImage: {
+    width: 200,
+    height: 200,
+    display: 'flex',
+    justifyContent: 'center',
     alignItems: 'center',
-    marginBottom: 24,
+    alignSelf: 'center',
+    marginBottom: 10,
   },
   logo: {
     width: 56,
@@ -228,14 +238,14 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     marginVertical: 24,
   },
-  line: { 
-    flex: 1, 
-    height: 1, 
-    backgroundColor: COLORS.borderGray 
+  line: {
+    flex: 1,
+    height: 1,
+    backgroundColor: COLORS.borderGray,
   },
-  orText: { 
-    marginHorizontal: 16, 
-    color: COLORS.darkGray, 
+  orText: {
+    marginHorizontal: 16,
+    color: COLORS.darkGray,
     fontSize: 14,
     fontWeight: '500',
   },
@@ -265,19 +275,19 @@ const styles = StyleSheet.create({
     fontWeight: '700',
     color: COLORS.text,
   },
-  bottomRow: { 
-    flexDirection: 'row', 
-    alignItems: 'center', 
+  bottomRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
     justifyContent: 'center',
     marginTop: 8,
     marginBottom: 20,
   },
-  bottomText: { 
+  bottomText: {
     color: COLORS.textSecondary,
     fontSize: 14,
   },
-  linkTextBold: { 
-    color: COLORS.primary, 
+  linkTextBold: {
+    color: COLORS.primary,
     fontWeight: '700',
     fontSize: 14,
   },

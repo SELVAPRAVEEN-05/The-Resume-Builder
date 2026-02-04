@@ -1,6 +1,9 @@
+import { useNavigation } from '@react-navigation/native';
+import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import React, { useState } from 'react';
 import {
   Alert,
+  Image,
   SafeAreaView,
   ScrollView,
   StatusBar,
@@ -10,6 +13,7 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
+import { RootStackParamList } from '../navigation/AppNavigator';
 
 const COLORS = {
   primary: '#10B981',
@@ -25,12 +29,10 @@ const COLORS = {
   twitter: '#1DA1F2',
 };
 
-interface RegisterScreenProps {
-  onLogin?: () => void;
-  onBack?: () => void;
-}
+const RegisterScreen = () => {
+  const navigation =
+    useNavigation<NativeStackNavigationProp<RootStackParamList>>();
 
-const RegisterScreen: React.FC<RegisterScreenProps> = ({ onLogin, onBack }) => {
   const [fullName, setFullName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -53,22 +55,22 @@ const RegisterScreen: React.FC<RegisterScreenProps> = ({ onLogin, onBack }) => {
 
     // TODO: implement actual registration logic
     Alert.alert('Success', `Welcome, ${fullName}!`);
-    if (onLogin) onLogin();
+    navigation.navigate('Dashboard');
   };
 
   return (
     <SafeAreaView style={styles.safeArea}>
       <StatusBar barStyle="dark-content" backgroundColor={COLORS.white} />
-      <ScrollView 
+      <ScrollView
         contentContainerStyle={styles.container}
         showsVerticalScrollIndicator={false}
       >
         {/* Logo */}
-        <View style={styles.logoContainer}>
-          <View style={styles.logo}>
-            <Text style={styles.logoText}>H</Text>
-          </View>
-        </View>
+        <Image
+          source={require('../assets/logo-new.png')}
+          style={styles.headerImage}
+          resizeMode="contain"
+        />
 
         {/* Title */}
         <Text style={styles.title}>Create your account</Text>
@@ -123,24 +125,25 @@ const RegisterScreen: React.FC<RegisterScreenProps> = ({ onLogin, onBack }) => {
         </View>
 
         {/* Terms Checkbox */}
-        <TouchableOpacity 
-          style={styles.checkboxContainer} 
+        <TouchableOpacity
+          style={styles.checkboxContainer}
           onPress={() => setAgreeToTerms(!agreeToTerms)}
           activeOpacity={0.7}
         >
-          <View style={[styles.checkbox, agreeToTerms && styles.checkboxChecked]}>
+          <View
+            style={[styles.checkbox, agreeToTerms && styles.checkboxChecked]}
+          >
             {agreeToTerms && <Text style={styles.checkmark}>✓</Text>}
           </View>
           <Text style={styles.checkboxLabel}>
-            I agree to the{' '}
-            <Text style={styles.link}>Terms & Conditions</Text>
+            I agree to the <Text style={styles.link}>Terms & Conditions</Text>
           </Text>
         </TouchableOpacity>
 
         {/* Register Button */}
-        <TouchableOpacity 
-          style={styles.primaryButton} 
-          onPress={handleRegister} 
+        <TouchableOpacity
+          style={styles.primaryButton}
+          onPress={handleRegister}
           activeOpacity={0.85}
         >
           <Text style={styles.primaryButtonText}>Register</Text>
@@ -155,9 +158,9 @@ const RegisterScreen: React.FC<RegisterScreenProps> = ({ onLogin, onBack }) => {
 
         {/* Social Login Buttons */}
         <View style={styles.socialContainer}>
-          <TouchableOpacity 
-            style={styles.socialButton} 
-            onPress={() => Alert.alert('Google', 'Continue with Google')} 
+          <TouchableOpacity
+            style={styles.socialButton}
+            onPress={() => Alert.alert('Google', 'Continue with Google')}
             activeOpacity={0.85}
           >
             <View style={[styles.socialIcon, { backgroundColor: '#FEE2E2' }]}>
@@ -165,9 +168,9 @@ const RegisterScreen: React.FC<RegisterScreenProps> = ({ onLogin, onBack }) => {
             </View>
           </TouchableOpacity>
 
-          <TouchableOpacity 
-            style={styles.socialButton} 
-            onPress={() => Alert.alert('Facebook', 'Continue with Facebook')} 
+          <TouchableOpacity
+            style={styles.socialButton}
+            onPress={() => Alert.alert('Facebook', 'Continue with Facebook')}
             activeOpacity={0.85}
           >
             <View style={[styles.socialIcon, { backgroundColor: '#DBEAFE' }]}>
@@ -175,9 +178,9 @@ const RegisterScreen: React.FC<RegisterScreenProps> = ({ onLogin, onBack }) => {
             </View>
           </TouchableOpacity>
 
-          <TouchableOpacity 
-            style={styles.socialButton} 
-            onPress={() => Alert.alert('Twitter', 'Continue with Twitter')} 
+          <TouchableOpacity
+            style={styles.socialButton}
+            onPress={() => Alert.alert('Twitter', 'Continue with Twitter')}
             activeOpacity={0.85}
           >
             <View style={[styles.socialIcon, { backgroundColor: '#DBEAFE' }]}>
@@ -189,7 +192,10 @@ const RegisterScreen: React.FC<RegisterScreenProps> = ({ onLogin, onBack }) => {
         {/* Bottom Text */}
         <View style={styles.bottomRow}>
           <Text style={styles.bottomText}>Have an account? </Text>
-          <TouchableOpacity onPress={onLogin} activeOpacity={0.7}>
+          <TouchableOpacity
+            onPress={() => navigation.navigate('Login')}
+            activeOpacity={0.7}
+          >
             <Text style={styles.linkTextBold}>Sign In</Text>
           </TouchableOpacity>
         </View>
@@ -199,33 +205,22 @@ const RegisterScreen: React.FC<RegisterScreenProps> = ({ onLogin, onBack }) => {
 };
 
 const styles = StyleSheet.create({
-  safeArea: { 
-    flex: 1, 
-    backgroundColor: COLORS.white 
+  safeArea: {
+    flex: 1,
+    backgroundColor: COLORS.white,
   },
   container: {
     padding: 24,
     paddingTop: 20,
     backgroundColor: COLORS.white,
   },
-  logoContainer: {
-    alignItems: 'center',
-    marginBottom: 24,
-  },
-  logo: {
-    width: 56,
-    height: 56,
-    borderRadius: 16,
-    backgroundColor: COLORS.lightGray,
-    borderWidth: 1,
-    borderColor: COLORS.borderGray,
-    alignItems: 'center',
+  headerImage: {
+    width: 200,
+    height: 200,
+    display: 'flex',
     justifyContent: 'center',
-  },
-  logoText: {
-    fontSize: 28,
-    fontWeight: '700',
-    color: COLORS.primary,
+    alignSelf: 'center',
+    alignItems: 'center',
   },
   title: {
     fontSize: 24,
@@ -309,14 +304,14 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     marginVertical: 24,
   },
-  line: { 
-    flex: 1, 
-    height: 1, 
-    backgroundColor: COLORS.borderGray 
+  line: {
+    flex: 1,
+    height: 1,
+    backgroundColor: COLORS.borderGray,
   },
-  orText: { 
-    marginHorizontal: 16, 
-    color: COLORS.darkGray, 
+  orText: {
+    marginHorizontal: 16,
+    color: COLORS.darkGray,
     fontSize: 14,
     fontWeight: '500',
   },
@@ -346,19 +341,19 @@ const styles = StyleSheet.create({
     fontWeight: '700',
     color: COLORS.text,
   },
-  bottomRow: { 
-    flexDirection: 'row', 
-    alignItems: 'center', 
+  bottomRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
     justifyContent: 'center',
     marginTop: 8,
     marginBottom: 20,
   },
-  bottomText: { 
+  bottomText: {
     color: COLORS.textSecondary,
     fontSize: 14,
   },
-  linkTextBold: { 
-    color: COLORS.primary, 
+  linkTextBold: {
+    color: COLORS.primary,
     fontWeight: '700',
     fontSize: 14,
   },

@@ -1,3 +1,5 @@
+import { useNavigation } from '@react-navigation/native';
+import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import React from 'react';
 import {
   Image,
@@ -8,6 +10,7 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
+import { RootStackParamList } from '../navigation/AppNavigator';
 
 const COLORS = {
   primary: '#10B981',
@@ -19,15 +22,10 @@ const COLORS = {
   text: '#1F2937',
 };
 
-interface GetStartedScreenProps {
-  onGetStarted?: () => void;
-  onLogin?: () => void;
-}
+export default function GetStartedScreen() {
+  const navigation =
+    useNavigation<NativeStackNavigationProp<RootStackParamList>>();
 
-export const GetStartedScreen: React.FC<GetStartedScreenProps> = ({
-  onGetStarted,
-  onLogin,
-}) => {
   return (
     <View style={styles.safeArea}>
       <StatusBar barStyle="dark-content" backgroundColor={COLORS.primary} />
@@ -81,7 +79,7 @@ export const GetStartedScreen: React.FC<GetStartedScreenProps> = ({
         <View style={styles.ctaSection}>
           <TouchableOpacity
             style={styles.primaryButton}
-            onPress={onGetStarted}
+            onPress={() => navigation.navigate('Register')}
             activeOpacity={0.8}
           >
             <Text style={styles.primaryButtonText}>Get Started</Text>
@@ -89,7 +87,7 @@ export const GetStartedScreen: React.FC<GetStartedScreenProps> = ({
 
           <TouchableOpacity
             style={styles.secondaryButton}
-            onPress={onLogin}
+            onPress={() => navigation.navigate('Login')}
             activeOpacity={0.8}
           >
             <Text style={styles.secondaryButtonText}>Login</Text>
@@ -103,7 +101,7 @@ export const GetStartedScreen: React.FC<GetStartedScreenProps> = ({
       </ScrollView>
     </View>
   );
-};
+}
 
 interface FeatureCardProps {
   icon: string;
@@ -279,5 +277,3 @@ const styles = StyleSheet.create({
     letterSpacing: 0.3,
   },
 });
-
-export default GetStartedScreen;
