@@ -55,7 +55,7 @@ const RegisterScreen = () => {
 
     // TODO: implement actual registration logic
     Alert.alert('Success', `Welcome, ${fullName}!`);
-    navigation.navigate('Dashboard');
+    navigation.navigate('Layout');
   };
 
   return (

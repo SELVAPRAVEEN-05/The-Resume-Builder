@@ -1,11 +1,12 @@
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import React from 'react';
 import { appRoutes, authRoutes } from '../routes';
+import Layout from '../screens/layout';
 
 export type RootStackParamList = {
   Login: undefined;
   Register: undefined;
-  Dashboard: undefined;
+  Layout: undefined;
   GetStarted: undefined;
 };
 
@@ -14,7 +15,7 @@ const Stack = createNativeStackNavigator<RootStackParamList>();
 export default function AppNavigator() {
   return (
     <Stack.Navigator
-      initialRouteName="GetStarted"
+      initialRouteName="Layout"
       screenOptions={{ headerShown: false }}
     >
       {/* Auth Routes (Login, Register) */}
@@ -26,14 +27,13 @@ export default function AppNavigator() {
         />
       ))}
 
-      {/* App Routes (Dashboard) */}
-      {appRoutes.map(route => (
-        <Stack.Screen
-          key={route.name}
-          name={route.name}
-          component={route.component}
-        />
-      ))}
+      {/* Layout Route with nested tab navigation */}
+      <Stack.Screen
+        name="Layout"
+        component={Layout}
+        options={{ headerShown: false }}
+      />
     </Stack.Navigator>
   );
 }
+

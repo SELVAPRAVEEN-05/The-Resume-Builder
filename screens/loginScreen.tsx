@@ -43,7 +43,7 @@ const LoginScreen = () => {
     }
 
     Alert.alert('Success', 'Welcome back!');
-    navigation.navigate('Dashboard');
+    navigation.navigate('Layout');
   };
 
   return (

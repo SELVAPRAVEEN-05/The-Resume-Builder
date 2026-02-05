@@ -1,8 +1,8 @@
-import PatientDashboard from '../screens/dashboard';
+import Layout from '../screens/layout';
 
 export const appRoutes = [
   {
-    name: 'Dashboard' as const,
-    component: PatientDashboard,
+    name: 'Layout' as const,
+    component: Layout,
   },
 ];
