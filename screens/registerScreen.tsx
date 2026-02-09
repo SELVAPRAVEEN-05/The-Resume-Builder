@@ -2,9 +2,9 @@ import { useNavigation } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import React, { useState } from 'react';
 import {
+  ActivityIndicator,
   Alert,
   Image,
-  SafeAreaView,
   ScrollView,
   StatusBar,
   StyleSheet,
@@ -14,6 +14,7 @@ import {
   View,
 } from 'react-native';
 import { RootStackParamList } from '../navigation/AppNavigator';
+import { registerUser } from '../api/auth.api';
 
 const COLORS = {
   primary: '#10B981',
@@ -38,8 +39,10 @@ const RegisterScreen = () => {
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [agreeToTerms, setAgreeToTerms] = useState(false);
+  const [loading, setLoading] = useState(false);
 
-  const handleRegister = () => {
+
+  const handleRegister = async () => {
     if (!fullName.trim() || !email.trim() || !password || !confirmPassword) {
       Alert.alert('Validation', 'Please fill all required fields');
       return;
@@ -53,13 +56,40 @@ const RegisterScreen = () => {
       return;
     }
 
-    // TODO: implement actual registration logic
-    Alert.alert('Success', `Welcome, ${fullName}!`);
-    navigation.navigate('Layout');
+    try {
+      setLoading(true);
+      console.log('Starting registration with email:', email);
+      const res = await registerUser(fullName.trim(), email.trim(), password);
+      console.log('Registration response received:', res);
+
+      if (res?.token) {
+        console.log('Token received, navigating to Layout');
+        Alert.alert('Success', `Welcome, ${fullName}!`);
+        navigation.navigate('Layout');
+      } else {
+        console.warn('No token in response:', res);
+        Alert.alert(
+          'Registration failed',
+          `No token returned from server. Response: ${JSON.stringify(
+            res || {},
+          )}`,
+        );
+      }
+    } catch (err: any) {
+      console.error('Register caught error:', err);
+      const msg =
+        err?.message ||
+        (err?.data && JSON.stringify(err.data)) ||
+        'Registration failed';
+      console.error('Error message being shown:', msg);
+      Alert.alert('Registration Error', msg.toString());
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
-    <SafeAreaView style={styles.safeArea}>
+    <View style={styles.safeArea}>
       <StatusBar barStyle="dark-content" backgroundColor={COLORS.white} />
       <ScrollView
         contentContainerStyle={styles.container}
@@ -145,8 +175,13 @@ const RegisterScreen = () => {
           style={styles.primaryButton}
           onPress={handleRegister}
           activeOpacity={0.85}
+          disabled={loading}
         >
-          <Text style={styles.primaryButtonText}>Register</Text>
+          {loading ? (
+            <ActivityIndicator color="#fff" />
+          ) : (
+            <Text style={styles.primaryButtonText}>Register</Text>
+          )}
         </TouchableOpacity>
 
         {/* Divider */}
@@ -200,7 +235,7 @@ const RegisterScreen = () => {
           </TouchableOpacity>
         </View>
       </ScrollView>
-    </SafeAreaView>
+    </View>
   );
 };
 

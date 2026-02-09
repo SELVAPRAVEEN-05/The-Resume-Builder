@@ -94,13 +94,7 @@ const Home = () => {
     >
       {/* Title */}
       <Text style={styles.pageTitle}>Resume templates</Text>
-
-      {/* Templates Grid */}
-      <View style={styles.templatesGrid}>
-        {TEMPLATES.map(template => (
-          <TemplateCard key={template.id} template={template} />
-        ))}
-      </View>
+      
     </ScrollView>
   );
 };

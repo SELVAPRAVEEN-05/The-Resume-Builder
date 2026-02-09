@@ -1,5 +1,6 @@
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { useNavigation } from '@react-navigation/native';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import React, { useEffect, useRef } from 'react';
 import {
   BackHandler,
@@ -31,11 +32,16 @@ export type LayoutTabParamList = {
   MyProfileScreen: undefined;
 };
 
-const Tab = createBottomTabNavigator<LayoutTabParamList>();
+export type CreateResumeStackParamList = {
+  TemplateSelection: undefined;
+  ResumeForm: { templateId: string; templateName: string };
+};
 
-/* ======================
-   Header
-====================== */
+const Tab = createBottomTabNavigator<LayoutTabParamList>();
+const CreateResumeStack =
+  createNativeStackNavigator<CreateResumeStackParamList>();
+
+// header
 const Header: React.FC = () => {
   return (
     <View style={styles.header}>
@@ -56,9 +62,6 @@ const Header: React.FC = () => {
   );
 };
 
-/* ======================
-   Center + Button
-====================== */
 const CreateResumeButton = ({ onPress }: any) => {
   return (
     <TouchableOpacity
@@ -73,14 +76,23 @@ const CreateResumeButton = ({ onPress }: any) => {
   );
 };
 
+const CreateResumeStackNavigator = () => {
+  return (
+    <CreateResumeStack.Navigator
+      screenOptions={{
+        headerShown: false,
+      }}
+    >
+      <CreateResumeStack.Screen name="TemplateSelection" component={Home} />
+    </CreateResumeStack.Navigator>
+  );
+};
+
 const Layout = () => {
   const tabRef = useRef<any>(null);
   const historyRef = useRef<string[]>([]);
   const stackNav = useNavigation();
 
-  /* ======================
-     Android Back Handling
-  ====================== */
   useEffect(() => {
     const onBackPress = () => {
       const prev = historyRef.current.pop();
@@ -135,7 +147,7 @@ const Layout = () => {
         {/* Create Resume (CENTER +) */}
         <Tab.Screen
           name="CreateResumeScreen"
-          component={Home}
+          component={CreateResumeStackNavigator}
           options={{
             tabBarLabel: '',
             tabBarButton: props => <CreateResumeButton {...props} />,
@@ -170,9 +182,7 @@ const Layout = () => {
   );
 };
 
-/* ======================
-   Styles (THEME UNCHANGED)
-====================== */
+// styles
 const styles = StyleSheet.create({
   container: {
     flex: 1,

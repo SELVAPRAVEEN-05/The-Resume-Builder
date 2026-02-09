@@ -2,9 +2,9 @@ import { useNavigation } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import React, { useState } from 'react';
 import {
+  ActivityIndicator,
   Alert,
   Image,
-  SafeAreaView,
   ScrollView,
   StatusBar,
   StyleSheet,
@@ -14,6 +14,7 @@ import {
   View,
 } from 'react-native';
 import { RootStackParamList } from '../navigation/AppNavigator';
+import { loginUser } from '../api/auth.api';
 
 const COLORS = {
   primary: '#10B981',
@@ -35,30 +36,52 @@ const LoginScreen = () => {
 
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [loading, setLoading] = useState(false);
 
-  const handleLogin = () => {
+  // auth
+
+  const handleLogin = async () => {
     if (!email.trim() || !password) {
       Alert.alert('Validation', 'Please enter email and password');
       return;
     }
 
-    Alert.alert('Success', 'Welcome back!');
-    navigation.navigate('Layout');
+    try {
+      setLoading(true);
+      const res = await loginUser(email.trim(), password);
+
+      if (res?.token) {
+        Alert.alert('Success', 'Welcome back!');
+        navigation.navigate('Layout');
+      } else {
+        Alert.alert('Login failed', 'Invalid email or password');
+      }
+    } catch (err: any) {
+      console.error('Login caught error:', err);
+
+      if (err?.status === 401 || err?.response?.status === 401) {
+        Alert.alert('Login failed', 'Invalid email or password');
+      } else {
+        Alert.alert('Login Error', 'Something went wrong. Please try again.');
+      }
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
-    <SafeAreaView style={styles.safeArea}>
+    <View style={styles.safeArea}>
       <StatusBar barStyle="dark-content" backgroundColor={COLORS.white} />
       <ScrollView
         contentContainerStyle={styles.container}
         showsVerticalScrollIndicator={false}
       >
         {/* Logo */}
-          <Image
-            source={require('../assets/logo-new.png')}
-            style={styles.headerImage}
-            resizeMode="contain"
-          />
+        <Image
+          source={require('../assets/logo-new.png')}
+          style={styles.headerImage}
+          resizeMode="contain"
+        />
 
         {/* Title */}
         <Text style={styles.title}>Sign in your account</Text>
@@ -94,8 +117,13 @@ const LoginScreen = () => {
           style={styles.primaryButton}
           onPress={handleLogin}
           activeOpacity={0.85}
+          disabled={loading}
         >
-          <Text style={styles.primaryButtonText}>Sign In</Text>
+          {loading ? (
+            <ActivityIndicator color="#fff" />
+          ) : (
+            <Text style={styles.primaryButtonText}>Sign In</Text>
+          )}
         </TouchableOpacity>
 
         {/* Divider */}
@@ -149,7 +177,7 @@ const LoginScreen = () => {
           </TouchableOpacity>
         </View>
       </ScrollView>
-    </SafeAreaView>
+    </View>
   );
 };
 
