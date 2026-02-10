@@ -1,6 +1,5 @@
-// types/resume.types.ts
 export interface Resume {
-  id: string;
+  id?: string;
   templateKey: string;
 
   personal: {
@@ -38,11 +37,14 @@ export interface Resume {
   projects: {
     title: string;
     description: string;
-    techStack: string;
+    techStack: string[];
   }[];
 
   certifications: {
     name: string;
+    grade: Number;
     date: string;
+    link: String;
+    description: String;
   }[];
 }

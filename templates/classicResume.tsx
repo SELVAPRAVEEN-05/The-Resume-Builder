@@ -1,130 +1,147 @@
 import React from 'react';
-import {
-  View,
-  Text,
-  StyleSheet,
-  ScrollView,
-} from 'react-native';
+import { ScrollView, StyleSheet, Text, View } from 'react-native';
 
-const ClassicResume = () => {
+const ClassicResume = ({ data }: any) => {
+  const {
+    resume,
+    personalDetails,
+    education = [],
+    skills = [],
+    experience = [],
+    projects = [],
+    certifications = [],
+    languages = [],
+  } = data;
+
   return (
     <ScrollView style={styles.container}>
       <View style={styles.page}>
-
-        {/* HEADER */}
-        <Text style={styles.name}>SELVAPRAVEEN S</Text>
-        <Text style={styles.role}>FULL-STACK DEVELOPER</Text>
+        {/* ================= HEADER ================= */}
+        <Text style={styles.name}>{personalDetails?.fullName}</Text>
 
         <Text style={styles.contact}>
-          selvaraveen2005@gmail.com  |  +91 9025174530  |  LinkedIn  |  GitHub  |  Kangayam, Tirupur, Tamil Nadu
+          {personalDetails?.phone} | {personalDetails?.email} |{' '}
+          {personalDetails?.linkedin ? 'LinkedIn' : ''}{' '}
+          {personalDetails?.github ? '| GitHub' : ''}
         </Text>
 
-        {/* SUMMARY */}
-        <Section title="SUMMARY">
-          <Text style={styles.paragraph}>
-            Dedicated Computer Engineering student with hands-on full-stack
-            development experience. Passionate about building clean, scalable,
-            and user-friendly web applications while continuously learning new
-            technologies and solving real-world problems through software.
-          </Text>
-        </Section>
+        {personalDetails?.address && (
+          <Text style={styles.contact}>{personalDetails.address}</Text>
+        )}
 
-        {/* EXPERIENCE */}
-        <Section title="EXPERIENCE">
-          <Text style={styles.bold}>
-            Full Stack Developer Intern – Crayon’d Digital Pvt. Ltd
-          </Text>
-          <Text style={styles.subText}>
-            Sep 2024 – Apr 2025 | Chennai
-          </Text>
+        <View style={styles.divider} />
 
-          <Bullet text="Developed responsive UI components and integrated backend APIs using Next.js, Zustand, Redux, and Sequelize." />
-          <Bullet text="Worked on real-world products including Fyno and Revature platforms." />
-          <Bullet text="Collaborated with a 20+ member Agile team and actively participated in Scrum ceremonies." />
-        </Section>
+        {/* ================= OBJECTIVE ================= */}
+        {resume?.objective && (
+          <View style={styles.section}>
+            <Text style={styles.sectionTitle}>OBJECTIVE</Text>
+            <Text style={styles.paragraph}>{resume.objective}</Text>
+          </View>
+        )}
 
-        {/* SKILLS (NOT SPLIT) */}
-        <Section title="SKILLS">
-          <Text style={styles.paragraph}>
-            C, C++, Java, Python, JavaScript, TypeScript, HTML, CSS, React.js,
-            Next.js, Node.js, Express.js, MySQL, MongoDB, Git, GitHub, Postman,
-            Tailwind CSS, Vite, Prisma
-          </Text>
-        </Section>
+        {/* ================= EDUCATION ================= */}
+        {education?.length > 0 && (
+          <View style={styles.section}>
+            <Text style={styles.sectionTitle}>EDUCATION</Text>
 
-        {/* PROJECTS */}
-        <Section title="PROJECTS">
-          <Project
-            title="Code Meet – Real-Time Coding Interview Platform"
-            description="Built a real-time interview platform with role-based access for Admin, Interviewer, and Candidate. Includes live coding, automated assessments, and feedback dashboards."
-            tech="Next.js, React, TypeScript, Node.js, PostgreSQL, Prisma, REST APIs"
-          />
+            {education.map((edu: any, i: number) => (
+              <View key={i} style={styles.block}>
+                <Text style={styles.bold}>
+                  {edu.degreeId?.degreeName} –{' '}
+                  {edu.specializationId?.specializationName}
+                </Text>
+                <Text style={styles.subText}>
+                  {edu.collegeId?.collegeName} | {edu.graduationYear}
+                </Text>
+                <Text style={styles.paragraph}>CGPA: {edu.grade}</Text>
+              </View>
+            ))}
+          </View>
+        )}
 
-          <Project
-            title="Food Web – Food Discovery & Delivery"
-            description="Developed a full-stack food platform supporting restaurant browsing, ordering, and event-based catering services with an intuitive UI."
-            tech="Next.js, Tailwind CSS, Node.js, PostgreSQL"
-          />
+        {/* ================= SKILLS ================= */}
+        <View style={styles.section}>
+          <Text style={styles.sectionTitle}>SKILLS</Text>
 
-          <Project
-            title="Telemedicine Platform for Rural Healthcare"
-            description="Created a healthcare platform enabling remote consultations with secure authentication and video call features."
-            tech="React Native, Node.js, Express, MongoDB"
-          />
-        </Section>
+          <View style={styles.skillsContainer}>
+            {skills?.map((item: any, index: number) => (
+              <View key={index} style={styles.skillChip}>
+                <Text style={styles.skillText}>
+                  • {item.skillId?.skillName}
+                </Text>
+              </View>
+            ))}
+          </View>
+        </View>
 
-        {/* EDUCATION */}
-        <Section title="EDUCATION">
-          <Text style={styles.bold}>
-            Bachelor of Engineering (B.E) – Computer Science and Engineering
-          </Text>
-          <Text style={styles.subText}>
-            Bannari Amman Institute of Technology | Graduation: 2027 | CGPA: 8.8
-          </Text>
+        {/* ================= EXPERIENCE ================= */}
+        {experience?.length > 0 && (
+          <View style={styles.section}>
+            <Text style={styles.sectionTitle}>EXPERIENCE</Text>
 
-          <Text style={[styles.bold, { marginTop: 6 }]}>
-            Higher Secondary (HSC)
-          </Text>
-          <Text style={styles.subText}>
-            Jaycees Matriculation Higher Secondary School | 2023 | 95%
-          </Text>
-        </Section>
+            {experience.map((exp: any, i: number) => (
+              <View key={i} style={styles.block}>
+                <Text style={styles.bold}>{exp.jobTitle}</Text>
+                <Text style={styles.subText}>
+                  {exp.companyId?.companyName} | {exp.startDate} –{' '}
+                  {exp.endDate || 'Present'}
+                </Text>
+                <Text style={styles.paragraph}>{exp.description}</Text>
+              </View>
+            ))}
+          </View>
+        )}
 
-        {/* ACHIEVEMENTS */}
-        <Section title="ACHIEVEMENTS">
-          <Bullet text="Java Certificate – Completed NPTEL Programming in Java with Elite score of 92%." />
-          <Bullet text="Solved 300+ coding problems on LeetCode." />
-          <Bullet text="Delivered training sessions on web development for junior students." />
-          <Bullet text="NSS Volunteer – Contributed 100+ hours in social service activities." />
-        </Section>
+        {/* ================= PROJECTS ================= */}
+        {projects?.length > 0 && (
+          <View style={styles.section}>
+            <Text style={styles.sectionTitle}>PROJECTS</Text>
 
+            {projects.map((p: any, i: number) => (
+              <View key={i} style={styles.block}>
+                <Text style={styles.bold}>{p.title}</Text>
+                <Text style={styles.paragraph}>{p.description}</Text>
+                {p.techStack && (
+                  <Text style={styles.tech}>Tech: {p.techStack}</Text>
+                )}
+              </View>
+            ))}
+          </View>
+        )}
+
+        {/* ================= CERTIFICATIONS ================= */}
+        {certifications?.length > 0 && (
+          <View style={styles.section}>
+            <Text style={styles.sectionTitle}>CERTIFICATIONS</Text>
+
+            {certifications.map((c: any, i: number) => (
+              <Text key={i} style={styles.bullet}>
+                • {c.name}
+              </Text>
+            ))}
+          </View>
+        )}
+
+        {/* ================= LANGUAGES ================= */}
+        {languages?.length > 0 && (
+          <View style={styles.section}>
+            <Text style={styles.sectionTitle}>LANGUAGES</Text>
+
+            {languages.map((l: any, i: number) => (
+              <Text key={i} style={styles.bullet}>
+                • {l.languageId?.languageName}
+              </Text>
+            ))}
+          </View>
+        )}
       </View>
     </ScrollView>
   );
 };
 
-/* ---------- Components ---------- */
+export default ClassicResume;
 
-const Section = ({ title, children }: any) => (
-  <View style={styles.section}>
-    <Text style={styles.sectionTitle}>{title}</Text>
-    {children}
-  </View>
-);
-
-const Bullet = ({ text }: any) => (
-  <Text style={styles.bullet}>• {text}</Text>
-);
-
-const Project = ({ title, description, tech }: any) => (
-  <View style={{ marginBottom: 10 }}>
-    <Text style={styles.bold}>{title}</Text>
-    <Text style={styles.paragraph}>{description}</Text>
-    <Text style={styles.tech}>Tech: {tech}</Text>
-  </View>
-);
-
-/* ---------- Styles ---------- */
+/* ================= STYLES ================= */
 
 const styles = StyleSheet.create({
   container: {
@@ -142,16 +159,16 @@ const styles = StyleSheet.create({
     fontWeight: '700',
     textAlign: 'center',
   },
-  role: {
-    fontSize: 14,
-    textAlign: 'center',
-    marginBottom: 6,
-  },
   contact: {
     fontSize: 12,
     textAlign: 'center',
-    marginBottom: 12,
+    marginTop: 2,
     color: '#333',
+  },
+  divider: {
+    height: 1,
+    backgroundColor: '#000',
+    marginVertical: 10,
   },
   section: {
     marginBottom: 14,
@@ -170,6 +187,9 @@ const styles = StyleSheet.create({
     fontSize: 13,
     marginBottom: 4,
   },
+  block: {
+    marginBottom: 8,
+  },
   bold: {
     fontWeight: '600',
   },
@@ -180,7 +200,24 @@ const styles = StyleSheet.create({
   tech: {
     fontSize: 12,
     fontStyle: 'italic',
+    marginTop: 2,
+  },
+
+  skillsContainer: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+  },
+
+  skillChip: {
+    paddingHorizontal: 10,
+    paddingVertical: 6,
+    marginRight: 2,
+    marginBottom: 2,
+  },
+
+  skillText: {
+    fontSize: 12,
+    color: '#333',
+    fontWeight: '500',
   },
 });
-
-export default ClassicResume;
