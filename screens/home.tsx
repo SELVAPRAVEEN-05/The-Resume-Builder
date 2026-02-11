@@ -1,17 +1,16 @@
 import React, { useState } from 'react';
 import { Resume } from '../types/resume.type';
-import TemplateSelect from './CreateResume/templateSelect';
-import EducationSkills from './CreateResume/educationSkills';
-import SkillsLanguagesScreen from './CreateResume/skillsLanguagesScreen';
-import ExperienceScreen from './CreateResume/experienceScreen';
 import CertificationsScreen from './CreateResume/certificationsScreen';
+import EducationSkills from './CreateResume/educationSkills';
+import ExperienceScreen from './CreateResume/experienceScreen';
+import PersonalScreen from './CreateResume/personalDetails';
 import PreviewScreen from './CreateResume/previewResume';
 import ProjectScreen from './CreateResume/projectScreen';
-import PersonalScreen from './CreateResume/personalDetails';
+import SkillsLanguagesScreen from './CreateResume/skillsLanguagesScreen';
+import TemplateSelect from './CreateResume/templateSelect';
 
-export default function CreateResumeFlow({ navigation }: any) {
+export default function CreateResumeFlow() {
   const [step, setStep] = useState(1);
-
   const [resume, setResume] = useState<Resume>({
     templateKey: '',
     personal: {
@@ -50,6 +49,7 @@ export default function CreateResumeFlow({ navigation }: any) {
     case 7:
       return <CertificationsScreen {...props} />;
     default:
-      return <PreviewScreen resume={resume} navigation={navigation} />;
+      console.log(resume);
+      return <PreviewScreen {...props} />;
   }
 }

@@ -16,29 +16,19 @@ export default function CertificationsScreen({
 }: any) {
   const certifications = resume.certifications;
 
-  // Ensure at least one certification exists
   useEffect(() => {
     if (certifications.length === 0) {
       addCertification();
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  const updateField = (
-    index: number,
-    key: string,
-    value: string,
-  ) => {
+  const updateField = (index: number, key: string, value: string) => {
     const updated = [...certifications];
 
     updated[index] = {
       ...updated[index],
       [key]:
-        key === 'grade'
-          ? value === ''
-            ? undefined
-            : Number(value)
-          : value,
+        key === 'grade' ? (value === '' ? undefined : Number(value)) : value, // date stays string
     };
 
     setResume({
@@ -55,7 +45,7 @@ export default function CertificationsScreen({
         {
           name: '',
           grade: undefined,
-          date: '',
+          date: '', // keep string
           link: '',
           description: '',
         },
@@ -68,10 +58,19 @@ export default function CertificationsScreen({
 
     setResume({
       ...resume,
-      certifications: certifications.filter(
-        (_: any, i: number) => i !== index,
-      ),
+      certifications: certifications.filter((_: any, i: number) => i !== index),
     });
+  };
+
+  const handlePreview = () => {
+    const formattedCertifications = resume.certifications.map((cert: any) => ({
+      ...cert,
+      date: new Date(cert.date), // convert here
+    }));
+
+    console.log('Converted Certifications:', formattedCertifications);
+
+    setStep(8);
   };
 
   return (
@@ -85,19 +84,15 @@ export default function CertificationsScreen({
             placeholder="Certification Name *"
             placeholderTextColor="#9CA3AF"
             value={cert.name}
-            onChangeText={t =>
-              updateField(index, 'name', t)
-            }
+            onChangeText={t => updateField(index, 'name', t)}
           />
 
           <TextInput
             style={styles.input}
-            placeholder="Date (e.g. Aug 2024) *"
+            placeholder="Date (YYYY-MM-DD) *"
             placeholderTextColor="#9CA3AF"
-            value={cert.date}
-            onChangeText={t =>
-              updateField(index, 'date', t)
-            }
+            value={cert.date || ''}
+            onChangeText={t => updateField(index, 'date', t)}
           />
 
           <TextInput
@@ -105,14 +100,8 @@ export default function CertificationsScreen({
             placeholder="Grade / Score (optional)"
             placeholderTextColor="#9CA3AF"
             keyboardType="numeric"
-            value={
-              cert.grade !== undefined
-                ? cert.grade.toString()
-                : ''
-            }
-            onChangeText={t =>
-              updateField(index, 'grade', t)
-            }
+            value={cert.grade !== undefined ? cert.grade.toString() : ''}
+            onChangeText={t => updateField(index, 'grade', t)}
           />
 
           <TextInput
@@ -120,9 +109,7 @@ export default function CertificationsScreen({
             placeholder="Certificate Link (optional)"
             placeholderTextColor="#9CA3AF"
             value={cert.link}
-            onChangeText={t =>
-              updateField(index, 'link', t)
-            }
+            onChangeText={t => updateField(index, 'link', t)}
           />
 
           <TextInput
@@ -131,9 +118,7 @@ export default function CertificationsScreen({
             placeholderTextColor="#9CA3AF"
             multiline
             value={cert.description}
-            onChangeText={t =>
-              updateField(index, 'description', t)
-            }
+            onChangeText={t => updateField(index, 'description', t)}
           />
 
           {/* ACTION BUTTONS */}
@@ -149,34 +134,26 @@ export default function CertificationsScreen({
               <MaterialCommunityIcons
                 name="delete"
                 size={18}
-                color={
-                  certifications.length === 1
-                    ? '#9CA3AF'
-                    : '#EF4444'
-                }
+                color={certifications.length === 1 ? '#9CA3AF' : '#EF4444'}
               />
             </TouchableOpacity>
 
-            <TouchableOpacity
-              style={styles.addBtn}
-              onPress={addCertification}
-            >
-              <MaterialCommunityIcons
-                name="plus"
-                size={18}
-                color="#10B981"
-              />
+            <TouchableOpacity style={styles.addBtn} onPress={addCertification}>
+              <MaterialCommunityIcons name="plus" size={18} color="#10B981" />
             </TouchableOpacity>
           </View>
         </View>
       ))}
 
-      <TouchableOpacity
-        style={[styles.addBtns, { marginTop: 16 }]}
-        onPress={() => setStep(8)}
-      >
-        <Text style={styles.btnText}>Preview</Text>
-      </TouchableOpacity>
+      <View style={styles.navigationRow}>
+        <TouchableOpacity style={styles.addBtns} onPress={handlePreview}>
+          <Text style={styles.btnText}>Next</Text>
+        </TouchableOpacity>
+
+        <TouchableOpacity style={styles.addBtns} onPress={() => setStep(6)}>
+          <Text style={styles.btnText}>Back</Text>
+        </TouchableOpacity>
+      </View>
     </ScrollView>
   );
 }

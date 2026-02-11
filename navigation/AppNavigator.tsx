@@ -15,7 +15,7 @@ const Stack = createNativeStackNavigator<RootStackParamList>();
 export default function AppNavigator() {
   return (
     <Stack.Navigator
-      initialRouteName="Login"
+      initialRouteName="Layout"
       screenOptions={{ headerShown: false }}
     >
       {/* Auth Routes (Login, Register) */}

@@ -7,13 +7,16 @@
 
 import { NavigationContainer } from '@react-navigation/native';
 import React from 'react';
+import { AutocompleteDropdownContextProvider } from 'react-native-autocomplete-dropdown';
 import AppNavigator from './navigation/AppNavigator';
 
 function App() {
   return (
-    <NavigationContainer>
-      <AppNavigator />
-    </NavigationContainer>
+    <AutocompleteDropdownContextProvider>
+      <NavigationContainer>
+        <AppNavigator />
+      </NavigationContainer>
+    </AutocompleteDropdownContextProvider>
   );
 }
 

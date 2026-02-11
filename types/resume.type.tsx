@@ -15,10 +15,19 @@ export interface Resume {
 
   objective: string;
 
-  skills: string[];
-  languages: string[];
+  skills: {
+    skillId: string;
+    skill: string;
+  }[];
+  languages: {
+    languageId: string;
+    language: string;
+  }[];
 
   education: {
+    collegeId: string;
+    degreeId: string;
+    specializationId: string;
     degree: string;
     specialization: string;
     college: string;
@@ -27,6 +36,7 @@ export interface Resume {
   }[];
 
   experience: {
+    companyId?: string;
     company: string;
     jobTitle: string;
     startDate: string;

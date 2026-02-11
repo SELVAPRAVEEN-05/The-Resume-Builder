@@ -26,7 +26,7 @@ export default function PersonalScreen({ resume, setResume, setStep }: any) {
           }
         />
         <TextInput
-          placeholder="Rple *"
+          placeholder="Role *"
           placeholderTextColor="#9CA3AF"
           style={styles.input}
           value={p.role}
@@ -49,9 +49,9 @@ export default function PersonalScreen({ resume, setResume, setStep }: any) {
           placeholder="Phone Number*"
           placeholderTextColor="#9CA3AF"
           style={styles.input}
-          value={p.phoneNumber}
+          value={p.phone}
           onChangeText={v =>
-            setResume({ ...resume, personal: { ...p, phoneNumber: v } })
+            setResume({ ...resume, personal: { ...p, phone: v } })
           }
         />
 
@@ -69,9 +69,9 @@ export default function PersonalScreen({ resume, setResume, setStep }: any) {
           placeholder="LinkedIn*"
           placeholderTextColor="#9CA3AF"
           style={styles.input}
-          value={p.linkedIn}
+          value={p.linkedin}
           onChangeText={v =>
-            setResume({ ...resume, personal: { ...p, linkedIn: v } })
+            setResume({ ...resume, personal: { ...p, linkedin: v } })
           }
         />
 
@@ -104,9 +104,15 @@ export default function PersonalScreen({ resume, setResume, setStep }: any) {
           onChangeText={v => setResume({ ...resume, objective: v })}
         />
 
-        <TouchableOpacity style={styles.button} onPress={() => setStep(3)}>
-          <Text style={styles.buttonText}>Next</Text>
-        </TouchableOpacity>
+        <View style={styles.navigationRow}>
+          <TouchableOpacity style={styles.addBtns} onPress={() => setStep(3)}>
+            <Text style={styles.btnText}>Next</Text>
+          </TouchableOpacity>
+
+          <TouchableOpacity style={styles.addBtns} onPress={() => setStep(1)}>
+            <Text style={styles.btnText}>Back</Text>
+          </TouchableOpacity>
+        </View>
       </ScrollView>
     </View>
   );

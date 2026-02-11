@@ -173,12 +173,20 @@ export default function ProjectScreen({
         </View>
       ))}
 
-      <TouchableOpacity
-        style={[styles.addBtns, { marginTop: 16 }]}
-        onPress={() => setStep(7)}
-      >
-        <Text style={styles.btnText}>Next</Text>
-      </TouchableOpacity>
+      <View style={styles.navigationRow}>
+        <TouchableOpacity
+          style={[styles.addBtns]}
+          onPress={() => setStep(7)}
+        >
+          <Text style={styles.btnText}>Next</Text>
+        </TouchableOpacity>
+        <TouchableOpacity
+          style={[styles.addBtns]}
+          onPress={() => setStep(5)}
+        >
+          <Text style={styles.btnText}>Back</Text>
+        </TouchableOpacity>
+      </View>
     </ScrollView>
   );
 }

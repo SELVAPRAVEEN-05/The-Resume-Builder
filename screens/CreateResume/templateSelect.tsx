@@ -15,7 +15,7 @@ const TEMPLATES = [
   },
 ];
 
-export default function TemplateSelect({ setStep }: any) {
+export default function TemplateSelect({ setStep, setResume }: any) {
   return (
     <View style={styles.container}>
       <View style={styles.header}>
@@ -30,6 +30,10 @@ export default function TemplateSelect({ setStep }: any) {
               setStep((prev: any) => ({
                 ...prev,
                 resume: { ...prev.resume, templateKey: t.id },
+              }));
+              setResume((prev: any) => ({
+                ...prev,
+                templateKey: t.id,
               }));
               setStep(2);
             }}
