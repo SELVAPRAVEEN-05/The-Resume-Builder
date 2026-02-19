@@ -109,7 +109,7 @@ const Layout = () => {
 
   return (
     <View style={styles.container}>
-      {/* <Header /> */}
+      <Header />
 
       <Tab.Navigator
         screenOptions={{
